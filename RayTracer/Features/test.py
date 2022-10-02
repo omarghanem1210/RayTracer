@@ -1,8 +1,11 @@
 import unittest
-from features import Tuple
+from features import Tuple, Vector
 
 t1 = Tuple(1, 1, 1, 0)
 t2 = Tuple(-1, 2, 7, 0)
+
+v1 = Vector(9, -7, 2.5)
+v2 = Vector(10, 222, 65464)
 
 
 class TestTuble(unittest.TestCase):
@@ -23,10 +26,25 @@ class TestTuble(unittest.TestCase):
 
 
 class TestVector(unittest.TestCase):
-    def test_equality(self):
-        self.assertFalse(t1 == t2)
-        self.assertTrue(t1 == Tuple(1, 1, 1, 0))
-        self.assertTrue(t1 != t2)
+    def test_scalar_multiplication(self):
+        self.assertEquals(2 * v1, v1 * 2)
+        self.assertEquals(2 * v1, Vector(18, -14, 5))
+
+    def test_division(self):
+        self.assertEquals(v1 / 2, Vector(4.5, -3.5, 1.25))
+
+    def test_magnitude(self):
+        self.assertEquals(v2.magnitude(), 65464.37718332009)
+
+    def test_normalize(self):
+        self.assertEquals(Vector(4, 0, 0).normalize(), Vector(1, 0, 0))
+
+    def test_dot_product(self):
+        self.assertEquals(Vector(1, 2, 3).dot(Vector(2, 3, 4)), 20)
+
+    def test_cross_product(self):
+        self.assertEquals(Vector(1, 2, 3).cross(Vector(2, 3, 4)), Vector(-1, 2, -1))
+        self.assertEquals(Vector(2, 3, 4).cross(Vector(1, 2, 3)), Vector(1, -2, 1))
 
 
 if __name__ == '__main__':
