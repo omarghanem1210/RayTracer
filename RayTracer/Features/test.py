@@ -1,5 +1,5 @@
 import unittest
-from features import Tuple, Vector
+from features import *
 
 t1 = Tuple(1, 1, 1, 0)
 t2 = Tuple(-1, 2, 7, 0)
@@ -45,6 +45,13 @@ class TestVector(unittest.TestCase):
     def test_cross_product(self):
         self.assertEquals(Vector(1, 2, 3).cross(Vector(2, 3, 4)), Vector(-1, 2, -1))
         self.assertEquals(Vector(2, 3, 4).cross(Vector(1, 2, 3)), Vector(1, -2, 1))
+
+
+class TestColor(unittest.TestCase):
+    def test_hadmard(self):
+        c1 = Color(1, 0.2, 0.4)
+        c2 = Color(0.9, 1, 0.1)
+        self.assertEquals(c1.hadmard_product(c2), Color(0.9, 0.2, 0.04))
 
 
 if __name__ == '__main__':

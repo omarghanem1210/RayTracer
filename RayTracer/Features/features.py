@@ -14,7 +14,8 @@ class Tuple:
         self.w = w
 
     def __eq__(self, other):
-        return self.x == other.x and self.y == other.y and self.z == other.z and self.w == other.w
+        return math.isclose(self.x, other.x) and math.isclose(self.y, other.y) and \
+               math.isclose(self.z, other.z) and self.w == other.w
 
     def __ne__(self, other):
         return not self.__eq__(other)
@@ -29,7 +30,7 @@ class Tuple:
         return Tuple(-self.x, -self.y, -self.z, self.w)
 
     def __str__(self):
-        return '(' + self.x + ', ' + self.y + ', ' + self.z + ')'
+        return f'({self.x}, {self.y}, {self.z})'
 
 
 class Vector(Tuple):
@@ -45,9 +46,11 @@ class Vector(Tuple):
         return Vector(self.x / other, self.y / other, self.z / other)
 
     def magnitude(self):
+        """Returns the magnitude per the mathematical definition"""
         return math.sqrt(self.x ** 2 + self.y ** 2 + self.z ** 2)
 
     def normalize(self):
+        """Returns a unit vector in the same direction as the original"""
         return self / self.magnitude()
 
     def dot(self, other):
@@ -63,3 +66,12 @@ class Vector(Tuple):
 class Point(Tuple):
     def __init__(self, x, y, z):
         super().__init__(x, y, z, 1)
+
+
+class Color(Tuple):
+    def __init__(self, x, y, z):
+        super().__init__(x, y, z, 0)
+
+    def hadmard_product(self, other):
+        """The method for blending two colors"""
+        return Color(self.x * other.x, self.y * other.y, self.z * other.z)
