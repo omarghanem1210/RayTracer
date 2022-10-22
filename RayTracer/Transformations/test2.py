@@ -1,5 +1,6 @@
 import unittest
-from objects import Matrix
+from transformations import Matrix
+from RayTracer.Features.features import *
 
 
 class MyTestCase(unittest.TestCase):
@@ -29,8 +30,15 @@ class MyTestCase(unittest.TestCase):
         matrix1 = Matrix(4, 4, rows1)
         matrix2 = Matrix(4, 4, rows2)
         matrix3 = matrix1.multiply(matrix2)
+
+        rows3 = [[1, 2, 3, 4], [2, 4, 4, 2], [8, 6, 4, 1], [0, 0, 0, 1]]
+        matrix4 = Matrix(4, 4, rows3)
+        b = Tuple(1, 2, 3, 1)
+
         self.assertEquals(matrix3, Matrix(4, 4, [[20, 22, 50, 48], [44, 54, 114, 108], [40, 58, 110, 102],
                                                  [16, 26, 46, 42]]))
+        c = matrix4.multiply(b)
+        self.assertEquals(c, Tuple(18, 24, 33, 1))
 
     def test_transposition(self):
         matrix = Matrix(4, 4, [[0, 9, 3, 0], [9, 8, 0, 8], [1, 8, 5, 3], [0, 0, 5, 8]])

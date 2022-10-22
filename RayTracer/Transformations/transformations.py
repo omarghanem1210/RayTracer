@@ -1,5 +1,13 @@
 import math
+
 from RayTracer.Features.features import *
+
+
+def identity_matrix():
+    m = Matrix(4, 4)
+    for i in range(4):
+        m.set(i, i, 1)
+    return m
 
 
 class Matrix:
@@ -40,7 +48,7 @@ class Matrix:
 
         for i in range(self.rows):
             for j in range(self.columns):
-                if not math.isclose(self.get(i, j), other.get(i, j), rel_tol = 0.001):
+                if not math.isclose(self.get(i, j), other.get(i, j), rel_tol=0.001, abs_tol=0.001):
                     return False
         return True
 
@@ -62,11 +70,12 @@ class Matrix:
     def multiply(self, other):
         """Multiplies two matrices or a matrix and a vector"""
         if issubclass(type(other), Tuple):
-            if self.columns != 3:
+            if self.rows != 4:
                 raise ValueError('number of columns does not match number of rows')
             else:
-                m = Matrix(3, 1, [other.x, other.y, other.z])
-                return self.multiply(m)
+                m = Matrix(4, 1, [[other.x], [other.y], [other.z], [other.w]])
+                m1 = self.multiply(m)
+                return Tuple(m1.get(0, 0), m1.get(1, 0), m1.get(2, 0), m1.get(3, 0))
 
         if self.columns != other.rows:
             raise ValueError('number of columns does not match number of rows')
@@ -138,3 +147,57 @@ class Matrix:
                 c = self.cofactor(i, j)
                 m.set(j, i, c / det)
         return m
+
+    def translations(self, x, y, z):
+        m = Matrix(4, 4)
+        k = 0
+        for i in [x, y, z]:
+            m.set(k, 3, i)
+            m.set(k, k, 1)
+            k += 1
+        m.set(3, 3, 1)
+        return m.multiply(self)
+
+    def scaling(self, x, y, z):
+        m = Matrix(4, 4)
+        k = 0
+        for i in [x, y, z, 1]:
+            m.set(k, k, i)
+            k += 1
+
+        return m.multiply(self)
+
+    def rotation_x(self, angle):
+        m = identity_matrix()
+        m.set(1, 1, math.cos(angle))
+        m.set(1, 2, -math.sin(angle))
+        m.set(2, 1, math.sin(angle))
+        m.set(2, 2, math.cos(angle))
+        return m.multiply(self)
+
+    def rotation_y(self, angle):
+        m = identity_matrix()
+        m.set(0, 0, math.cos(angle))
+        m.set(0, 2, math.sin(angle))
+        m.set(2, 0, -math.sin(angle))
+        m.set(2, 2, math.cos(angle))
+        return m.multiply(self)
+
+    def rotation_z(self, angle):
+        m = identity_matrix()
+        m.set(0, 0, math.cos(angle))
+        m.set(0, 1, -math.sin(angle))
+        m.set(1, 0, math.sin(angle))
+        m.set(1, 1, math.cos(angle))
+        return m.multiply(self)
+
+    def shearing(self, x_y, x_z, y_x, y_z, z_x, z_y):
+        m = identity_matrix()
+        m.set(0, 1, x_y)
+        m.set(0, 2, x_z)
+        m.set(1, 0, y_x)
+        m.set(1, 3, y_z)
+        m.set(2, 0, z_x)
+        m.set(2, 1, z_y)
+        return m.multiply(self)
+

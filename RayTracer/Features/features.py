@@ -14,8 +14,9 @@ class Tuple:
         self.w = w
 
     def __eq__(self, other):
-        return math.isclose(self.x, other.x) and math.isclose(self.y, other.y) and \
-               math.isclose(self.z, other.z) and self.w == other.w
+        return math.isclose(self.x, other.x, rel_tol=0.001, abs_tol=0.001) and\
+               math.isclose(self.y, other.y, rel_tol=0.001, abs_tol=0.001) and \
+               math.isclose(self.z, other.z, rel_tol=0.001, abs_tol=0.001) and self.w == other.w
 
     def __ne__(self, other):
         return not self.__eq__(other)
