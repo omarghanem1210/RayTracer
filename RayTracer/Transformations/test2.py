@@ -1,5 +1,6 @@
+import math
 import unittest
-from transformations import Matrix
+from transformations import *
 from RayTracer.Features.features import *
 
 
@@ -67,6 +68,7 @@ class MyTestCase(unittest.TestCase):
                                   [-0.69231, -0.69231, -0.76923, -1.92308]])
         i = m.inverse()
         self.assertTrue(m.inverse() == m_inverse)
+
 
 
 if __name__ == '__main__':

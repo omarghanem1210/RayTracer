@@ -1,4 +1,5 @@
 import math
+from RayTracer.Transformations import *
 
 
 class Tuple:
@@ -14,7 +15,7 @@ class Tuple:
         self.w = w
 
     def __eq__(self, other):
-        return math.isclose(self.x, other.x, rel_tol=0.001, abs_tol=0.001) and\
+        return math.isclose(self.x, other.x, rel_tol=0.001, abs_tol=0.001) and \
                math.isclose(self.y, other.y, rel_tol=0.001, abs_tol=0.001) and \
                math.isclose(self.z, other.z, rel_tol=0.001, abs_tol=0.001) and self.w == other.w
 
@@ -46,12 +47,23 @@ class Vector(Tuple):
     def __truediv__(self, other):
         return Vector(self.x / other, self.y / other, self.z / other)
 
+    def __add__(self, other):
+        return Vector(self.x + other.x, self.y + other.y, self.z + other.z)
+
+    def __sub__(self, other):
+        return Vector(self.x - other.x, self.y - other.y, self.z - other.z)
+
+    def __neg__(self):
+        return Vector(-self.x, -self.y, -self.z)
+
     def magnitude(self):
         """Returns the magnitude per the mathematical definition"""
         return math.sqrt(self.x ** 2 + self.y ** 2 + self.z ** 2)
 
     def normalize(self):
         """Returns a unit vector in the same direction as the original"""
+        if math.isclose(self.magnitude(), 1, rel_tol=0.001):
+            return self
         return self / self.magnitude()
 
     def dot(self, other):
@@ -63,6 +75,9 @@ class Vector(Tuple):
         z2 = self.x * other.y - self.y * other.x
         return Vector(x2, y2, z2)
 
+    def reflect(self, normal):
+        return self - normal * 2 * self.dot(normal)
+
 
 class Point(Tuple):
     def __init__(self, x, y, z):
@@ -72,6 +87,11 @@ class Point(Tuple):
 class Color(Tuple):
     def __init__(self, x, y, z):
         super().__init__(x, y, z, 0)
+
+    def __mul__(self, other):
+        return Color(other * self.x, other * self.y, other * self.z)
+
+    __rmul__ = __mul__
 
     def hadmard_product(self, other):
         """The method for blending two colors"""

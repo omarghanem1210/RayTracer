@@ -1,7 +1,7 @@
 import math
 
 import numpy as np
-from features import *
+from RayTracer.Features.features import *
 import png
 
 
@@ -26,7 +26,7 @@ class Canvas:
         return self.pixels[y, x]
 
     def write_pixel(self, x, y, color):
-        self.pixels[y, x] = color
+        self.pixels[round(y), round(x)] = color
 
     def to_png(self, path):
         """ forms a png image file from the canvas in the given directory.
